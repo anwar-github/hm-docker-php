@@ -151,6 +151,7 @@ services:
         - "9000"
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
+        - "z-coin.local:${DOCKER_HOST_IP}"
       environment:
         - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
         - DOCKER_HOST=tcp://docker-in-docker:2375
@@ -273,7 +274,7 @@ services:
         - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
         - TZ=${WORKSPACE_TIMEZONE}
       volumes:
-        - ${DATA_PATH_HOST}/mysql:/var/lib/mysql
+        - mysql:/var/lib/mysql
         - ${MYSQL_ENTRYPOINT_INITDB}:/docker-entrypoint-initdb.d
       ports:
         - "${MYSQL_PORT}:3306"
@@ -889,3 +890,21 @@ services:
       networks:
         - backend
 
+### Mnbegeneral ################################################
+    mnbegeneral:
+      build:
+        context: ./mnbegeneral
+#        args:
+#          - MYSQL_VERSION=${MYSQL_VERSION}
+#      environment:
+#        - MYSQL_DATABASE=${MYSQL_DATABASE}
+#        - MYSQL_USER=${MYSQL_USER}
+#        - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+#        - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+#        - TZ=${WORKSPACE_TIMEZONE}
+      volumes:
+        - ${APP_CODE_PATH_HOST}:${APP_CODE_PATH_CONTAINER}
+      ports:
+        - "5000:5000"
+      networks:
+        - backend
